@@ -27,3 +27,7 @@ Execute cmd in your egg project.
 ```bash
 $ npx egg-pkg-schema
 ```
+
+Using in your package.json
+
+![image](./screenshot.png)
