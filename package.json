@@ -1,0 +1,59 @@
+{
+  "name": "egg-pkg-schema",
+  "version": "0.0.8",
+  "description": "",
+  "bin": {
+    "egg-pkg-schema": "./bin.js"
+  },
+  "dependencies": {
+    "mz-modules": "^2.1.0",
+    "shelljs": "~0.8.3"
+  },
+  "devDependencies": {
+    "typescript-json-schema": "^0.36.0",
+    "egg-ts-helper": "^1.24.1",
+    "autod": "^3.0.1",
+    "egg-bin": "^4.3.7",
+    "egg-ci": "^1.8.0",
+    "eslint": "^4.18.1",
+    "eslint-config-egg": "^7.0.0",
+    "webstorm-disable-index": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "scripts": {
+    "autod": "autod",
+    "lint": "eslint .",
+    "test": "npm run lint -- --fix && egg-bin pkgfiles && npm run test-local",
+    "test-local": "egg-bin test",
+    "cov": "egg-bin cov",
+    "ci": "npm run lint && egg-bin pkgfiles --check && npm run cov",
+    "pkgfiles": "egg-bin pkgfiles",
+    "schema": "typescript-json-schema ./tsconfig.json PackageInfo -o ./schema.json",
+    "prepublish": "npm run schema",
+    "postinstall": "node ./index"
+  },
+  "ci": {
+    "version": "8"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "eslintIgnore": [
+    "coverage",
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "files": [
+    "bin.js",
+    "index.js",
+    "schema.json",
+    "schema.d.ts"
+  ],
+  "author": "whxaxes <whxaxes@gmail.com>",
+  "license": "MIT"
+}

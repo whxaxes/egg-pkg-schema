@@ -1,0 +1,235 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "AwaitWriteFinishOptions": {
+            "properties": {
+                "pollInterval": {
+                    "description": "File size polling interval.",
+                    "type": "number"
+                },
+                "stabilityThreshold": {
+                    "description": "Amount of time in milliseconds for a file size to remain constant before emitting its event.",
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "WatchItem": {
+            "properties": {
+                "directory": {
+                    "type": "string"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "execAtInit": {
+                    "type": "boolean"
+                },
+                "generator": {
+                    "type": "string"
+                },
+                "ignore": {
+                    "anyOf": [
+                        {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ]
+                },
+                "pattern": {
+                    "anyOf": [
+                        {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ]
+                },
+                "trigger": {
+                    "items": {
+                        "enum": [
+                            "add",
+                            "change",
+                            "unlink"
+                        ],
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "watch": {
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "WatchOptions": {
+            "properties": {
+                "alwaysStat": {
+                    "description": "If relying upon the [`fs.Stats`](http://nodejs.org/api/fs.html#fs_class_fs_stats) object that\nmay get passed with `add`, `addDir`, and `change` events, set this to `true` to ensure it is\nprovided even in cases where it wasn't already available from the underlying watch events.",
+                    "type": "boolean"
+                },
+                "atomic": {
+                    "description": "`true` if `useFsEvents` and `usePolling` are `false`). Automatically filters out artifacts\nthat occur when using editors that use \"atomic writes\" instead of writing directly to the\nsource file. If a file is re-added within 100 ms of being deleted, Chokidar emits a `change`\nevent rather than `unlink` then `add`. If the default of 100 ms does not work well for you,\nyou can override it by setting `atomic` to a custom value, in milliseconds.",
+                    "type": [
+                        "number",
+                        "boolean"
+                    ]
+                },
+                "awaitWriteFinish": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/AwaitWriteFinishOptions"
+                        },
+                        {
+                            "type": "boolean"
+                        }
+                    ],
+                    "description": "can be set to an object in order to adjust timing params:"
+                },
+                "binaryInterval": {
+                    "description": "Interval of file system polling for binary files. ([see list of binary extensions](https://gi\nthub.com/sindresorhus/binary-extensions/blob/master/binary-extensions.json))",
+                    "type": "number"
+                },
+                "cwd": {
+                    "description": "The base directory from which watch `paths` are to be derived. Paths emitted with events will\nbe relative to this.",
+                    "type": "string"
+                },
+                "depth": {
+                    "description": "If set, limits how many levels of subdirectories will be traversed.",
+                    "type": "number"
+                },
+                "disableGlobbing": {
+                    "description": "If set to true then the strings passed to .watch() and .add() are treated as literal path\nnames, even if they look like globs. Default: false.",
+                    "type": "boolean"
+                },
+                "followSymlinks": {
+                    "description": "When `false`, only the symlinks themselves will be watched for changes instead of following\nthe link references and bubbling events through the link's path.",
+                    "type": "boolean"
+                },
+                "ignoreInitial": {
+                    "description": "If set to `false` then `add`/`addDir` events are also emitted for matching paths while\ninstantiating the watching as chokidar discovers these file paths (before the `ready` event).",
+                    "type": "boolean"
+                },
+                "ignorePermissionErrors": {
+                    "description": "Indicates whether to watch files that don't have read permissions if possible. If watching\nfails due to `EPERM` or `EACCES` with this set to `true`, the errors will be suppressed\nsilently.",
+                    "type": "boolean"
+                },
+                "ignored": {
+                    "description": "([anymatch](https://github.com/es128/anymatch)-compatible definition) Defines files/paths to\nbe ignored. The whole relative or absolute path is tested, not just filename. If a function\nwith two arguments is provided, it gets called twice per path - once with a single argument\n(the path), second time with two arguments (the path and the\n[`fs.Stats`](http://nodejs.org/api/fs.html#fs_class_fs_stats) object of that path)."
+                },
+                "interval": {
+                    "description": "Interval of file system polling.",
+                    "type": "number"
+                },
+                "persistent": {
+                    "description": "Indicates whether the process should continue to run as long as files are being watched. If\nset to `false` when using `fsevents` to watch, no more events will be emitted after `ready`,\neven if the process continues to run.",
+                    "type": "boolean"
+                },
+                "useFsEvents": {
+                    "description": "Whether to use the `fsevents` watching interface if available. When set to `true` explicitly\nand `fsevents` is available this supercedes the `usePolling` setting. When set to `false` on\nOS X, `usePolling: true` becomes the default.",
+                    "type": "boolean"
+                },
+                "usePolling": {
+                    "description": "Whether to use fs.watchFile (backed by polling), or fs.watch. If polling leads to high CPU\nutilization, consider setting this to `false`. It is typically necessary to **set this to\n`true` to successfully watch files over a network**, and it may be necessary to successfully\nwatch files in other non-standard situations. Setting to `true` explicitly on OS X overrides\nthe `useFsEvents` default.",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "properties": {
+        "egg": {
+            "description": "egg config",
+            "properties": {
+                "declarations": {
+                    "description": "whether create d.ts automatically, only works with egg-bin",
+                    "type": "boolean"
+                },
+                "framework": {
+                    "description": "framework name",
+                    "type": "string"
+                },
+                "require": {
+                    "description": "require some module in startup, like `--require` in node, only works with egg-bin",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "tsHelper": {
+                    "description": "tsHelper options, only works with egg.declarations = true",
+                    "properties": {
+                        "caseStyle": {
+                            "description": "tsHelper caseStyle for generator, default to lower",
+                            "type": "string"
+                        },
+                        "configFile": {
+                            "description": "tsHelper config file url, default to {process.cwd()}/tshelper.json or {process.cwd()}/tshelper.js",
+                            "type": "string"
+                        },
+                        "silent": {
+                            "description": "make tsHelper silent, default to false",
+                            "type": "boolean"
+                        },
+                        "typings": {
+                            "description": "tsHelper typings dir, default to {process.cwd()}/typings",
+                            "type": "string"
+                        },
+                        "watchDirs": {
+                            "additionalProperties": {
+                                "anyOf": [
+                                    {
+                                        "$ref": "#/definitions/WatchItem"
+                                    },
+                                    {
+                                        "type": "boolean"
+                                    }
+                                ]
+                            },
+                            "description": "tsHelper watcher configuration",
+                            "type": "object"
+                        },
+                        "watchOptions": {
+                            "$ref": "#/definitions/WatchOptions",
+                            "description": "tsHelper watcher options, will pass to chokidar"
+                        }
+                    },
+                    "type": "object"
+                },
+                "typescript": {
+                    "description": "whether use typescript mode, only works with egg-bin",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "eggPlugin": {
+            "description": "egg plugin info",
+            "properties": {
+                "name": {
+                    "description": "egg plugin name",
+                    "type": "string"
+                },
+                "optionalDependencies": {
+                    "description": "optional dependencies",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "type": "object"
+}
+
